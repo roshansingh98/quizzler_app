@@ -1,5 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'questionBank.dart';
+
+QuestionBank questionBank =
+    QuestionBank(); // Helps in abstraction of question and answer list
 
 void main() {
   runApp(Quizzler());
@@ -33,12 +37,32 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
-  List<Icon> scoreKeeper = [
-    Icon(
-      Icons.check,
-      color: Colors.green,
-    ),
-  ];
+  List<Icon> scoreKeeper = [];
+
+//  List<String> questionList = [
+//    'You can lead a cow down stairs but not up stairs.',
+//    'Approximately one quarter of human bones are in the feet.',
+//    'A slug\'s blood is green.'
+//  ];
+//
+//  List<bool> answers = [false, true, true];
+
+  nextQuest() {
+    setState(() {
+      questionBank.nextQuestion();
+    });
+  }
+
+  answerChecking(bool buttonPressed) {
+    setState(() {
+      if (buttonPressed == questionBank.getAnswer()) {
+        scoreKeeper.add(Icon(Icons.check, color: Colors.green));
+      } else {
+        scoreKeeper.add(Icon(Icons.close, color: Colors.red));
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -51,7 +75,8 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                "This is where the questions go",
+                questionBank.getQuestionText(),
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 22.0,
                   color: Colors.white,
@@ -71,11 +96,8 @@ class _QuizPageState extends State<QuizPage> {
                 style: TextStyle(color: Colors.white, fontSize: 20.0),
               ),
               onPressed: () {
-                setState(() {
-                  scoreKeeper.add(
-                    Icon(Icons.check, color: Colors.green),
-                  );
-                });
+                answerChecking(true);
+                nextQuest();
               },
             ),
           ),
@@ -90,7 +112,10 @@ class _QuizPageState extends State<QuizPage> {
                 "False",
                 style: TextStyle(color: Colors.white, fontSize: 20.0),
               ),
-              onPressed: () {},
+              onPressed: () {
+                answerChecking(false);
+                nextQuest();
+              },
             ),
           ),
         ), //False
