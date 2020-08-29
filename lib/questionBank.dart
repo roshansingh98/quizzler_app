@@ -37,6 +37,15 @@ class QuestionBank {
     }
   }
 
+  bool endOfQuestionList() {
+    if (_questNo >= _questions.length - 1) {
+      _questNo = 0;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   String getQuestionText() {
     return _questions[_questNo].questions;
   }

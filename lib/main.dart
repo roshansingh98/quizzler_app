@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'questionBank.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 QuestionBank questionBank =
     QuestionBank(); // Helps in abstraction of question and answer list
@@ -48,8 +49,16 @@ class _QuizPageState extends State<QuizPage> {
 //  List<bool> answers = [false, true, true];
 
   nextQuest() {
+    bool val = questionBank.endOfQuestionList();
     setState(() {
-      questionBank.nextQuestion();
+      if (val == true) {
+        _onBasicAlertPressed(context);
+        scoreKeeper.clear();
+      } else {
+        setState(() {
+          questionBank.nextQuestion();
+        });
+      }
     });
   }
 
@@ -125,4 +134,12 @@ class _QuizPageState extends State<QuizPage> {
       ],
     );
   }
+}
+
+void _onBasicAlertPressed(BuildContext context) {
+  Alert(
+          context: context,
+          title: "Questions Ended",
+          desc: "Thank You for taking the quiz")
+      .show();
 }
